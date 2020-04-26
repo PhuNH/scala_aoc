@@ -6,7 +6,7 @@ import y2019.w3._
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val d = new Day10
+    val d = new Day11
     println(d.one)
     println(d.two)
   }
