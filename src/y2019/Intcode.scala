@@ -2,6 +2,7 @@ package y2019
 
 import common.Utils.using
 
+import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
 
 class Intcode(inputCodes: Array[Long]) {
@@ -10,8 +11,7 @@ class Intcode(inputCodes: Array[Long]) {
   private var ip = 0
   private var relBase = 0
   private var input = 0L
-  private var output = 0L
-  private var printOutput = false
+  private var outputs = ArrayBuffer(0L)
   private var ined = false
   private var state = Intcode.Paused
 
@@ -53,8 +53,8 @@ class Intcode(inputCodes: Array[Long]) {
         } else
           state = Intcode.Paused
       case Intcode.Out =>
-        output = read(1, paramModes)
-        if (printOutput) println(output)
+        outputs(0) += 1
+        outputs.addOne(read(1, paramModes))
         ip += 2
         //state = Intcode.Paused
       // 5.2 5-8: Int
@@ -86,15 +86,13 @@ class Intcode(inputCodes: Array[Long]) {
     }
   }
 
-  def run(printOutput: Boolean = false): Long = {
+  def run(outputs: ArrayBuffer[Long] = null): Unit = {
     state = Intcode.Running
-    this.printOutput = printOutput
+    this.outputs = outputs
 
     do {
       runInstruction()
     } while (state == Intcode.Running)
-
-    output
   }
 
   def setInput(input: Long = 0): Boolean = {
@@ -106,7 +104,7 @@ class Intcode(inputCodes: Array[Long]) {
       false
   }
 
-  def isFinished: Boolean = state == Intcode.Stopped
+  def getState: Int = state
 }
 
 object Intcode {
@@ -140,9 +138,11 @@ object Intcode {
     _.getLines().next().split(",").map(_.toLong)
   )
 
-  def runProgram(codes: Array[Long], input: Long, printOutput: Boolean = false): Long = {
+  def runProgram(codes: Array[Long], input: Long): Unit = {
     val program = Intcode(codes)
     program.setInput(input)
-    program.run(printOutput)
+    val outputs = ArrayBuffer(0L)
+    program.run(outputs)
+    println(outputs.slice(1, outputs(0).toInt+1).mkString(" "))
   }
 }

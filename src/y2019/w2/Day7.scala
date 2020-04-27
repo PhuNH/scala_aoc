@@ -4,6 +4,8 @@ import common.Day
 import common.Utils._
 import y2019.Intcode
 
+import scala.collection.mutable.ArrayBuffer
+
 class Day7 extends Day(inputPath(2019, 7)) {
   private val codes = Intcode.readCodes(inputs.head)
 
@@ -22,10 +24,12 @@ class Day7 extends Day(inputPath(2019, 7)) {
     val inout = new Array[Long](5)
     inout(0) = 0
 
-    while (!amplifiers(4).isFinished) {
+    while (amplifiers(4).getState != Intcode.Stopped) {
       for (i <- 0 to 4) {
         amplifiers(i).setInput(inout(i))
-        inout(if (i < 4) i+1 else 0) = amplifiers(i).run()
+        val output = ArrayBuffer(0L)
+        amplifiers(i).run(output)
+        inout(if (i < 4) i+1 else 0) = output(output(0).toInt)
       }
     }
     inout(0)

@@ -7,7 +7,7 @@ import y2019.Intcode
 class Day5 extends Day(inputPath(2019, 5)) {
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
 
-  def one: Long = Intcode.runProgram(codes, Intcode.IdAc, printOutput = true)
+  def one: Unit = Intcode.runProgram(codes, Intcode.IdAc)
 
-  def two: Long = Intcode.runProgram(codes, Intcode.IdTrc)
+  def two: Unit = Intcode.runProgram(codes, Intcode.IdTrc)
 }
