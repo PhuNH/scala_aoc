@@ -12,7 +12,7 @@ class Intcode(inputCodes: Array[Long]) {
   private var relBase = 0
   private var input = 0L
   private var outputs = ArrayBuffer(0L)
-  private var ined = false
+  private var ined = true
   private var state = Intcode.Paused
 
   private def parseInstruction(instr: Int): (Int, List[Int]) = {
