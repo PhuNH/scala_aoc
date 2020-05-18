@@ -1,9 +1,9 @@
 package common
 
 object Utils {
-  def inputPath(year: Int, day: Int) = s"/mnt/d/Projects/aoc/input/$year/$day"
+  def inputPath(year: Int, day: Int) = s"input/$year/$day"
 
-  def testPath(year: Int, day: Int, number: Int) = s"/mnt/d/Projects/aoc/input/$year/test/$day.$number"
+  def testPath(year: Int, day: Int, number: Int) = s"input/$year/test/$day.$number"
 
   def using[A <: { def close(): Unit }, B](resource: A)(f: A => B): B =
     try {

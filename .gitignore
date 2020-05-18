@@ -1,6 +1,3 @@
-*.class
-*.log
-
-aoc.iml
-/.*
-!/.gitignore
+/target
+/project/target
+/.idea
