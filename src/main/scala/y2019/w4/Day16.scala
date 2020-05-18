@@ -3,12 +3,13 @@ package y2019.w4
 import common.Day
 import common.Utils._
 
+import scala.collection.parallel.CollectionConverters._
 import scala.io.Source
 import scala.math.abs
 
 class Day16 extends Day(inputPath(2019, 16), testPath(2019, 16, 1),
   testPath(2019, 16, 2), testPath(2019, 16, 3)) {
-  private val signal: Seq[Int] = using(Source.fromFile(inputs(1)))(_.getLines().next().split("").map(_.toInt))
+  private val signal: Seq[Int] = using(Source.fromFile(inputs(0)))(_.getLines().next().split("").map(_.toInt))
   private val basePattern = Seq(0, 1, 0, -1)
   private val patterns = Array.fill(signal.length)(Array.fill(signal.length)(0))
 
@@ -24,7 +25,7 @@ class Day16 extends Day(inputPath(2019, 16), testPath(2019, 16, 1),
   }
 
   private def runPhase(input: Seq[Int], firstRun: Boolean): Seq[Int] =
-    input.indices.map(i => calOutputAt(input, i+1, firstRun))
+    input.indices.par.map(i => calOutputAt(input, i+1, firstRun)).seq
 
   @scala.annotation.tailrec
   private def runNPhase(input: Seq[Int], n: Int, firstIndex: Int): Seq[Int] = {
@@ -34,9 +35,9 @@ class Day16 extends Day(inputPath(2019, 16), testPath(2019, 16, 1),
     } else input
   }
 
-  def one: Unit = {
+  def one: Int = {
     val output = runNPhase(signal, 100, 100)
-    println(output.slice(0,8).mkString(""))
+    output.slice(0,8).mkString("").toInt
   }
 
   def two: Unit = ()
