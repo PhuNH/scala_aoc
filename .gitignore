@@ -1,6 +1,6 @@
 *.class
 *.log
 
-AoC.iml
+aoc.iml
 /.*
 !/.gitignore
