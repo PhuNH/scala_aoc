@@ -86,7 +86,7 @@ class Intcode(inputCodes: Array[Long]) {
     }
   }
 
-  def run(outputs: ArrayBuffer[Long] = null): Unit = {
+  def run(outputs: ArrayBuffer[Long] = ArrayBuffer(0L)): Unit = {
     state = Intcode.Running
     this.outputs = outputs
 

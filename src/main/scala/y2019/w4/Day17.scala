@@ -8,16 +8,12 @@ import scala.collection.mutable.ArrayBuffer
 
 class Day17 extends Day(inputPath(2019, 17)) {
   private val Scaffold = '#'
-  private val Space = '.'
-
   private val Up = '^'
   private val Down = 'v'
   private val Left = '<'
   private val Right = '>'
-  private val Tumbling = 'X'
 
   private val scaffoldPoints = Set(Scaffold, Up, Down, Left, Right).map(_.toInt)
-  private val robotPoints = Set(Up, Down, Left, Right, Tumbling).map(_.toInt)
 
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
 
@@ -65,9 +61,40 @@ class Day17 extends Day(inputPath(2019, 17)) {
     findIntersections(view).map(alignParam).sum
   }
 
-  def two: Unit = {
-//    val codes = this.codes.clone()
-//    codes(0) = 2
-//    val program = Intcode(codes)
+  private def inputRule(program: Intcode, rule: Seq[Int]): Unit = {
+    rule.foreach(code => {
+      program.setInput(code)
+      program.run()
+    })
+    program.setInput(10)
+    program.run()
+  }
+
+  private def inputRules(program: Intcode, rules: Seq[Int]*): Unit = {
+    rules.foreach(rule => inputRule(program, rule))
+  }
+
+  private def inputSelection(program: Intcode, outputs: ArrayBuffer[Long]): Unit = {
+    program.setInput('n'.toInt)
+    program.run()
+    program.setInput(10)
+    program.run(outputs)
+  }
+
+  def two: Long = {
+    val codes = this.codes.clone()
+    codes(0) = 2
+    val program = Intcode(codes)
+
+    val mainRoutine = "A,B,A,C,A,B,C,A,B,C".map(_.toInt)
+    val A = "R,12,R,4,R,10,R,12".map(_.toInt)
+    val B = "R,6,L,8,R,10".map(_.toInt)
+    val C = "L,8,R,4,R,4,R,6".map(_.toInt)
+
+    inputRules(program, mainRoutine, A, B, C)
+
+    val outputs = ArrayBuffer(0L)
+    inputSelection(program, outputs)
+    outputs(outputs(0).toInt)
   }
 }
