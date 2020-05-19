@@ -3,42 +3,51 @@ package y2019.w4
 import common.Day
 import common.Utils._
 
-import scala.collection.parallel.CollectionConverters._
 import scala.io.Source
 import scala.math.abs
 
 class Day16 extends Day(inputPath(2019, 16), testPath(2019, 16, 1),
   testPath(2019, 16, 2), testPath(2019, 16, 3)) {
-  private val signal: Seq[Int] = using(Source.fromFile(inputs(0)))(_.getLines().next().split("").map(_.toInt))
-  private val basePattern = Seq(0, 1, 0, -1)
-  private val patterns = Array.fill(signal.length)(Array.fill(signal.length)(0))
+  private val signal: Array[Int] = using(Source.fromFile(inputs(0)))(_.getLines().next().split("").map(_.toInt))
 
-  private def calOutputAt(input: Seq[Int], dupNum: Int, firstRun: Boolean): Int = {
-    if (firstRun) {
-      val patDup = basePattern.flatMap(pat => Seq.fill(dupNum)(pat))
-      val rotNum = input.length / patDup.length + 1
-      val patDupRot = Seq.fill(rotNum)(patDup).flatten
-      patDupRot.tail.copyToArray(patterns(dupNum-1))
-    }
-
-    abs(input.indices.map(i => input(i) * patterns(dupNum-1)(i)).sum % 10)
+  private def calOutputAt(input: Seq[Int], outputIndex: Int): Int = {
+    val dupNum = outputIndex + 1
+    val pluses = input.slice(outputIndex, input.length).sliding(dupNum, 4 * dupNum).flatten.sum
+    val minuses = input.slice(outputIndex + 2 * dupNum, input.length).sliding(dupNum, 4 * dupNum).flatten.sum
+    abs((pluses - minuses) % 10)
   }
 
-  private def runPhase(input: Seq[Int], firstRun: Boolean): Seq[Int] =
-    input.indices.par.map(i => calOutputAt(input, i+1, firstRun)).seq
+  private def runPhase(input: Array[Int], length: Int = 0): Array[Int] =
+    (if (length > 0) 0 until length else input.indices)
+      .map(i => calOutputAt(input, i)).toArray
 
   @scala.annotation.tailrec
-  private def runNPhase(input: Seq[Int], n: Int, firstIndex: Int): Seq[Int] = {
-    if (n > 0) {
-      val output = runPhase(input, n == firstIndex)
-      runNPhase(output, n-1, firstIndex)
-    } else input
+  private def runNPhase(input: Array[Int], n: Int, f: (Array[Int], Int) => Array[Int]): Array[Int] = {
+    if (n > 1) {
+      val output = f(input, 0)
+      runNPhase(output, n-1, f)
+    } else
+      f(input, 8)
   }
 
-  def one: Int = {
-    val output = runNPhase(signal, 100, 100)
-    output.slice(0,8).mkString("").toInt
+  def one: Int = runNPhase(signal, 100, runPhase).mkString("").toInt
+
+  def runPhase2(input: Array[Int], length: Int = 0): Array[Int] = {
+    val output = new Array[Int](input.length)
+    for (i <- Range.inclusive(input.length-1, 0, -1)) {
+      output(i) =
+        if (i == input.length-1) input(i)
+        else (output(i+1) + input(i)) % 10
+    }
+    if (length > 0) output.slice(0, length) else output
   }
 
-  def two: Unit = ()
+  def two: Int = {
+    //val signal = "03081770884921959731165446850517".split("").map(_.toInt)
+    val offset = signal.slice(0, 7).mkString("").toInt
+    val input = Array.fill(10000)(signal).flatten.slice(offset, signal.length*10000)
+    if (offset >= signal.length) {
+      runNPhase(input, 100, runPhase2).mkString("").toInt
+    } else 0
+  }
 }
