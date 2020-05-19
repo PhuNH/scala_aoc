@@ -5,7 +5,7 @@ import common.Direction
 import scala.collection.mutable.ArrayBuffer
 
 class ExpandableGrid {
-  private val data = ArrayBuffer.fill(ExpandableGrid.InitialSize)(
+  private var data = ArrayBuffer.fill(ExpandableGrid.InitialSize)(
     ArrayBuffer.fill(ExpandableGrid.InitialSize)(ExpandableGrid.Unknown))
 
   def height: Int = data.size
@@ -29,7 +29,11 @@ class ExpandableGrid {
       data.map(_.appendAll(Array.fill(expandingSize)(ExpandableGrid.Unknown)))
   }
 
+  def setData(newData: ArrayBuffer[ArrayBuffer[Int]]): Unit = data = newData
+
   override def toString: String = data.map(row => row.mkString(" ")).mkString("\n")
+
+  def toCharString: String = data.map(row => row.map(_.toChar).mkString(" ")).mkString("\n")
 }
 
 object ExpandableGrid {
