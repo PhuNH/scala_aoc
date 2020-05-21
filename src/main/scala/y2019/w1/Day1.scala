@@ -6,7 +6,7 @@ import common.Utils._
 import scala.io.Source
 
 class Day1 extends Day(inputPath(2019, 1)) {
-  private val moduleMasses: List[String] = using(Source.fromFile(inputs.head))(_.getLines().toList)
+  private val moduleMasses: List[String] = using(Source.fromResource(inputs.head))(_.getLines().toList)
 
   private def fuelRequired(mass: Int): Int = mass / 3 - 2
 

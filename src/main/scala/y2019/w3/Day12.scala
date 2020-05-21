@@ -36,7 +36,7 @@ class Day12 extends Day(inputPath(2019, 12),
   }
 
   private def initState(filePath: String): State = State(
-    using(Source.fromFile(filePath))(source => {
+    using(Source.fromResource(filePath))(source => {
       source.getLines().toArray.map(l => {
         val splitted = l.split("=, <>".toArray)
         Moon(Array(splitted(2).toInt, splitted(5).toInt, splitted(8).toInt), Array(0, 0, 0))

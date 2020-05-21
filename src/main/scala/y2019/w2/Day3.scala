@@ -34,7 +34,7 @@ class Day3 extends Day(inputPath(2019, 3)) {
     recGen(((0, 0), 0), path, List())
   }
 
-  private val paths: List[List[((Int, Int), Int)]] = using(Source.fromFile(inputs.head))(
+  private val paths: List[List[((Int, Int), Int)]] = using(Source.fromResource(inputs.head))(
     _.getLines().map(l => generateSteps(l.split(",").toList)).toList
   )
 

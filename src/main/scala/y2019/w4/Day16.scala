@@ -8,7 +8,7 @@ import scala.math.abs
 
 class Day16 extends Day(inputPath(2019, 16), testPath(2019, 16, 1),
   testPath(2019, 16, 2), testPath(2019, 16, 3)) {
-  private val signal: Array[Int] = using(Source.fromFile(inputs(0)))(_.getLines().next().split("").map(_.toInt))
+  private val signal: Array[Int] = using(Source.fromResource(inputs(0)))(_.getLines().next().split("").map(_.toInt))
 
   private def calOutputAt(input: Seq[Int], outputIndex: Int): Int = {
     val dupNum = outputIndex + 1

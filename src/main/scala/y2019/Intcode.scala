@@ -134,7 +134,7 @@ object Intcode {
 
   def apply(codes: Array[Long]): Intcode = new Intcode(codes)
 
-  def readCodes(filePath: String): Array[Long] = using(Source.fromFile(filePath))(
+  def readCodes(filePath: String): Array[Long] = using(Source.fromResource(filePath))(
     _.getLines().next().split(",").map(_.toLong)
   )
 

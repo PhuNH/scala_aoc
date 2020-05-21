@@ -10,7 +10,7 @@ class Day8 extends Day(inputPath(2019, 8)) {
   private val White = '1'
   private val Trans = '2'
 
-  private val encoded: String = using(Source.fromFile(inputs.head))(_.getLines().next())
+  private val encoded: String = using(Source.fromResource(inputs.head))(_.getLines().next())
 
   private val (width, height) = (25, 6)
 

@@ -16,7 +16,7 @@ class Day10 extends Day(inputPath(2019, 10),
   type Aa = Array[Array[(Int, Int)]]
 
   private val asteroids =
-    using(Source.fromFile(inputs(0)))(_.getLines().toArray).zipWithIndex.flatMap(l => {
+    using(Source.fromResource(inputs(0)))(_.getLines().toArray).zipWithIndex.flatMap(l => {
       l._1.zipWithIndex.filter(_._1 == Asteroid).map {
         case (_, x) => (x, l._2)
       }

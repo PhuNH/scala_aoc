@@ -9,7 +9,7 @@ import scala.io.Source
 class Day6 extends Day(inputPath(2019, 6)) {
   private val m = mutable.Map[String, List[String]]()
 
-  using(Source.fromFile(inputs.head))(_.getLines().foreach(l => {
+  using(Source.fromResource(inputs.head))(_.getLines().foreach(l => {
     val relation = l.split(')')
     val orbit = relation(1)
     val center = relation(0)

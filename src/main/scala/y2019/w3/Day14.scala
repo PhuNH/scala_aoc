@@ -19,7 +19,7 @@ class Day14 extends Day(inputPath(2019, 14),
   case class Chemical(name: String, quantity: Int, components: Components, level: Int)
   object Ore extends Chemical(oreName, 1, Array(), 0)
 
-  private def getReactionList: RList = using(Source.fromFile(inputs(0)))(
+  private def getReactionList: RList = using(Source.fromResource(inputs(0)))(
     _.getLines().toArray.map(l => {
       l.split(",=>".toArray).filterNot(_ == "").map(_.trim.split(' '))
     })
