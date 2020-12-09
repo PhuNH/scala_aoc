@@ -14,7 +14,7 @@ class Day6 extends Day(inputPath(2019, 6)) {
     val orbit = relation(1)
     val center = relation(0)
     if (!m.contains(center))
-      m.addOne((center, List()))
+      m += ((center, List.empty[String]))
     val newTail = center :: m(center)
     m.update(orbit, newTail)
     if (m.contains(orbit))

@@ -45,7 +45,7 @@ class Day11 extends Day(inputPath(2019, 11)) {
         grid.appendAll(toBeAppended)
       case Left =>
         gridWidth += AdjustSize
-        grid.map(_.prependAll(new Array[Int](AdjustSize)))
+        grid.foreach(_.prependAll(new Array[Int](AdjustSize)))
         painted.indices foreach (i => painted.update(i, (painted(i)._1+AdjustSize, painted(i)._2)))
         currentX += AdjustSize
       case Right =>
@@ -59,7 +59,7 @@ class Day11 extends Day(inputPath(2019, 11)) {
       program.run(outputs)
       // paint
       grid(currentY)(currentX) = outputs(outputs(0).toInt - 1).toInt
-      painted.addOne((currentX, currentY))
+      painted += ((currentX, currentY))
       // turn and move
       outputs(outputs(0).toInt) match {
         case TurnRight =>

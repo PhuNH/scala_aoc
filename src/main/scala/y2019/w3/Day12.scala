@@ -88,7 +88,7 @@ class Day12 extends Day(inputPath(2019, 12),
   private def simulateUntil(prevStates: mutable.LinkedHashSet[State]): Long = {
     val newState = simulateOneStep(prevStates.last)
     if (prevStates(newState)) prevStates.dropWhile(s => s != newState).size
-    else simulateUntil(prevStates.addOne(newState))
+    else simulateUntil(prevStates += newState)
   }
 
   private val pv0s = (0 to 2).toArray.map(i => {

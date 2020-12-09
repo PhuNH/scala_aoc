@@ -40,7 +40,7 @@ class Day2 extends Day(inputPath(2018, 2)) {
       j <- Range(i+1, ids.length)
       comparison = compare(ids(i), ids(j))
       if comparison > ids(i).length
-    } yield (i,comparison))(0)
+    } yield (i,comparison)).head
     val diffIndex = iCom._2 - 1 - ids.head.length
     println(ids(iCom._1).substring(0,diffIndex) + ids(iCom._1).substring(diffIndex+1))
     0

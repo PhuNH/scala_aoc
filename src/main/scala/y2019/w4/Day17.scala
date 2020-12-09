@@ -22,10 +22,10 @@ class Day17 extends Day(inputPath(2019, 17)) {
     def splitData(data: ArrayBuffer[Int], acc: ArrayBuffer[ArrayBuffer[Int]]): ArrayBuffer[ArrayBuffer[Int]] = {
       val splitIndex = data.indexOf('\n')
       if (splitIndex == -1) {
-        if (data.nonEmpty) acc.addOne(data) else acc
+        if (data.nonEmpty) acc += data else acc
       } else {
         val splitted = data.splitAt(splitIndex)
-        splitData(splitted._2.tail, if (splitted._1.nonEmpty) acc.addOne(splitted._1) else acc)
+        splitData(splitted._2.tail, if (splitted._1.nonEmpty) acc += splitted._1 else acc)
       }
     }
 

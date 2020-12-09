@@ -16,12 +16,12 @@ class Day3 extends Day(inputPath(2018, 3)) {
     val start = startAndSizes(0).split(',').map(_.toInt) // [x, y]
     val sizes = startAndSizes(1).split('x').map(_.toInt) // [w, h]
     if (start(0) + sizes(0) > fabric(0).length)
-      fabric.map(_.appendAll(Array.fill(start(0)+sizes(0)-fabric(0).length)(List())))
+      fabric.foreach(_.appendAll(Array.fill(start(0)+sizes(0)-fabric(0).length)(List())))
     if (start(1) + sizes(1) > fabric.length)
       fabric.appendAll(ArrayBuffer.fill(start(1)+sizes(1)-fabric.length)(ArrayBuffer.fill(fabric(0).length)(List())))
     for (i <- Range(start(1), start(1)+sizes(1)))
       for (j <- Range(start(0), start(0)+sizes(0)))
-        fabric(i)(j) = fabric(i)(j).appended(index)
+        fabric(i)(j) = fabric(i)(j) :+ index
   }
 
   for (i <- claimStrings.indices)

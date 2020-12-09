@@ -14,6 +14,6 @@ class Day6 extends Day(inputPath(2020, 6)) {
   }
 
   def two: Int = {
-    yesGroups.map(_.fold(Range.inclusive('a','z').map(_.toChar).toString)(_.toSeq.intersect(_).unwrap).length).sum
+    yesGroups.map(_.fold(Range.inclusive('a','z').map(_.toChar).toString)(_.toSeq.intersect(_).toString).length).sum
   }
 }

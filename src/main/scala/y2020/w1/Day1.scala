@@ -25,6 +25,6 @@ class Day1 extends Day(inputPath(2020, 1)) {
       j <- Range(i+1, entries.length-1)
       k <- Range(j+1, entries.length)
       if entries(i) + entries(j) + entries(k) == 2020
-    } yield entries(i) * entries(j) * entries(k))(0)
+    } yield entries(i) * entries(j) * entries(k)).head
   }
 }

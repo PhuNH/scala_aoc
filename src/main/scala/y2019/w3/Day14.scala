@@ -43,7 +43,7 @@ class Day14 extends Day(inputPath(2019, 14),
             val quantity = line.last(0).toInt
             val components = line.init.map(chem => (defineChemical(reactionList, chem(1)), chem(0).toLong))
             val newChem = Chemical(name, quantity, components, maxLevel(components) + 1)
-            chemList.addOne(newChem)
+            chemList += newChem
             newChem
         }
       }
@@ -60,14 +60,14 @@ class Day14 extends Day(inputPath(2019, 14),
         case i if i > -1 =>
           val diff = comp._2 - residuals(i)._2
           if (diff < 0) residuals.update(i, (residuals(i)._1, -diff))
-          else residuals.subtractOne(residuals(i))
+          else residuals -= residuals(i)
           (comp._1, diff)
         case _ => comp
       }).filter(_._2 > 0)
       val below = thisLevelSubtracted.flatMap(comp => {
         val multi = (comp._2 - 1) / comp._1.quantity + 1
         val residualQuantity = multi * comp._1.quantity - comp._2
-        if (residualQuantity > 0) residuals.addOne((comp._1, residualQuantity))
+        if (residualQuantity > 0) residuals += ((comp._1, residualQuantity))
         comp._1.components.map(c => (c._1, c._2 * multi))
       })
 

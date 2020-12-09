@@ -54,7 +54,7 @@ class Intcode(inputCodes: Array[Long]) {
           state = Intcode.Paused
       case Intcode.Out =>
         outputs(0) += 1
-        outputs.addOne(read(1, paramModes))
+        outputs += read(1, paramModes)
         ip += 2
         //state = Intcode.Paused
       // 5.2 5-8: Int
