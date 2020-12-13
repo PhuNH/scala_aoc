@@ -54,7 +54,7 @@ class Day15 extends Day(inputPath(2019, 15)) {
 
     def popStep(): Unit = {
       val popped = stepStack.pop()
-      nextPos.copyFrom(popped._1)
+      nextPos.updateWith(popped._1)
       direction = popped._2
       count = popped._3
     }
@@ -72,7 +72,7 @@ class Day15 extends Day(inputPath(2019, 15)) {
             grid.setAtPos(nextPos, Unchanged)
             loop()
           case something if something == Moved || (something == Found && option == MapDraw) =>
-            currentPos.copyFrom(nextPos)
+            currentPos.updateWith(nextPos)
             adjust()
 
             val eastPos = currentPos.east
@@ -92,7 +92,7 @@ class Day15 extends Day(inputPath(2019, 15)) {
             if (direction != Direction.North && checkPos(southPos)) stepStack.push((southPos, Direction.South, count + 1))
 
             if (something == Found)
-              oxyPos.copyFrom(currentPos)
+              oxyPos.updateWith(currentPos)
             grid.setAtPos(currentPos, Moved)
             loop()
           case _ => // Found and OxySearch
