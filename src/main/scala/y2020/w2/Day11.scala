@@ -15,32 +15,32 @@ class Day11 extends Day(inputPath(2020, 11), testPath(2020, 11, 1)) {
   private val width = layout(0).length
   private val length = layout.length
 
-  private def adjacentSeats(x: Int, y: Int, baseLayout: Layout): IndexedSeq[Char] = for {
+  private def adjacentSeats(x: Int, y: Int, base: Layout): IndexedSeq[Char] = for {
     i <- (if (y == 0) y else y-1) to (if (y == length-1) y else y+1)
     j <- (if (x == 0) x else x-1) to (if (x == width-1) x else x+1)
     if i != y || j != x
-  } yield baseLayout(i)(j)
+  } yield base(i)(j)
 
-  private def directionalSeats(x: Int, y: Int, baseLayout: Layout): IndexedSeq[Char] = {
+  private def directionalSeats(x: Int, y: Int, base: Layout): IndexedSeq[Char] = {
     //import Numeric.Implicits._
     def seatInDirection(xDir: Int, yDir: Int): Char = {
       (xDir, yDir) match {
         case (-1, -1) =>
-          for (i <- 1 to x.min(y)) if (baseLayout(y-i)(x-i) != FLOOR) return baseLayout(y-i)(x-i)
+          for (i <- 1 to x.min(y)) if (base(y-i)(x-i) != FLOOR) return base(y-i)(x-i)
         case (-1, 0) =>
-          for (i <- 1 to x) if (baseLayout(y)(x-i) != FLOOR) return baseLayout(y)(x-i)
+          for (i <- 1 to x) if (base(y)(x-i) != FLOOR) return base(y)(x-i)
         case (-1, 1) =>
-          for (i <- 1 to x.min(length-y-1)) if (baseLayout(y+i)(x-i) != FLOOR) return baseLayout(y+i)(x-i)
+          for (i <- 1 to x.min(length-y-1)) if (base(y+i)(x-i) != FLOOR) return base(y+i)(x-i)
         case (0, 1) =>
-          for (i <- 1 until length-y) if (baseLayout(y+i)(x) != FLOOR) return baseLayout(y+i)(x)
+          for (i <- 1 until length-y) if (base(y+i)(x) != FLOOR) return base(y+i)(x)
         case (1, 1) =>
-          for (i <- 1 to (width-x-1).min(length-y-1)) if (baseLayout(y+i)(x+i) != FLOOR) return baseLayout(y+i)(x+i)
+          for (i <- 1 to (width-x-1).min(length-y-1)) if (base(y+i)(x+i) != FLOOR) return base(y+i)(x+i)
         case (1, 0) =>
-          for (i <- 1 until width-x) if (baseLayout(y)(x+i) != FLOOR) return baseLayout(y)(x+i)
+          for (i <- 1 until width-x) if (base(y)(x+i) != FLOOR) return base(y)(x+i)
         case (1, -1) =>
-          for (i <- 1 to (width-x-1).min(y)) if (baseLayout(y-i)(x+i) != FLOOR) return baseLayout(y-i)(x+i)
+          for (i <- 1 to (width-x-1).min(y)) if (base(y-i)(x+i) != FLOOR) return base(y-i)(x+i)
         case (0, -1) =>
-          for (i <- 1 to y) if (baseLayout(y-i)(x) != FLOOR) return baseLayout(y-i)(x)
+          for (i <- 1 to y) if (base(y-i)(x) != FLOOR) return base(y-i)(x)
       }
       FLOOR
     }
@@ -52,14 +52,15 @@ class Day11 extends Day(inputPath(2020, 11), testPath(2020, 11, 1)) {
     } yield seatInDirection(xDir, yDir)
   }
 
-  private def seatsToCheck(seatType: Int): (Int, Int, Layout) => IndexedSeq[Char] =
-    if (seatType == 1) adjacentSeats else directionalSeats
+  private def neighboringSeatsFunction(neighboringSeatType: Int): (Int, Int, Layout) => IndexedSeq[Char] =
+    if (neighboringSeatType == 1) adjacentSeats else directionalSeats
 
-  private def checkRules(x: Int, y: Int, base: Layout, current: Layout, seatType: Int): Boolean =
-    if (base(y)(x) == EMPTY && !seatsToCheck(seatType)(x, y, base).contains(OCCUP)) {
+  private def checkRules(x: Int, y: Int, base: Layout, current: Layout, neighboringSeatType: Int): Boolean =
+    if (base(y)(x) == EMPTY && !neighboringSeatsFunction(neighboringSeatType)(x, y, base).contains(OCCUP)) {
       current(y)(x) = OCCUP
       true
-    } else if (base(y)(x) == OCCUP && seatsToCheck(seatType)(x, y, base).count(_ == OCCUP) >= 3+seatType) {
+    } else if (base(y)(x) == OCCUP &&
+      neighboringSeatsFunction(neighboringSeatType)(x, y, base).count(_ == OCCUP) >= 3+neighboringSeatType) {
       current(y)(x) = EMPTY
       true
     } else false
@@ -76,12 +77,8 @@ class Day11 extends Day(inputPath(2020, 11), testPath(2020, 11, 1)) {
     val temp = new Layout(length)
     cloneLayout(layout, base)
     cloneLayout(base, temp)
-    var i = 0
-    while (!checkRulesAll(base, temp, seatType)) {
-      cloneLayout(temp, base)
-      i += 1
-    }
-    println(i)
+
+    while (!checkRulesAll(base, temp, seatType)) cloneLayout(temp, base)
     base.map(_.count(_ == OCCUP)).sum
   }
 

@@ -1,8 +1,8 @@
 package y2019.w4
 
-import common.Day
+import common.{Coords, Day, ExpandableGrid}
 import common.Utils._
-import y2019._
+import y2019.Intcode
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -17,7 +17,7 @@ class Day17 extends Day(inputPath(2019, 17)) {
 
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
 
-  private def convertToGrid(outputs: ArrayBuffer[Long]): ExpandableGrid = {
+  private def convertToGrid(outputs: ArrayBuffer[Long]): ExpandableGrid[Int] = {
     @scala.annotation.tailrec
     def splitData(data: ArrayBuffer[Int], acc: ArrayBuffer[ArrayBuffer[Int]]): ArrayBuffer[ArrayBuffer[Int]] = {
       val splitIndex = data.indexOf('\n')
@@ -30,26 +30,26 @@ class Day17 extends Day(inputPath(2019, 17)) {
     }
 
     val data = splitData(outputs.map(_.toInt), ArrayBuffer.empty[ArrayBuffer[Int]])
-    val grid = ExpandableGrid()
+    val grid = ExpandableGrid[Int]()
     grid.setData(data)
     grid
   }
 
-  private def alignParam(pos: TwoD): Int = pos.v * pos.h
+  private def alignParam(pos: Coords): Int = pos.v * pos.h
 
-  private def contains(set: Set[Int], view: ExpandableGrid, pts: TwoD*): Boolean =
+  private def contains(set: Set[Int], view: ExpandableGrid[Int], pts: Coords*): Boolean =
     pts.forall(p => set.contains(view.getAtPos(p)))
 
-  private def isIntersection(pos: TwoD, view: ExpandableGrid): Boolean = {
-    pos.v > 0 && pos.v < view.height-1 && pos.h > 0 && pos.h < view.width-1 &&
+  private def isIntersection(pos: Coords, view: ExpandableGrid[Int]): Boolean = {
+    pos.v > 0 && pos.v < view.length-1 && pos.h > 0 && pos.h < view.width-1 &&
       contains(scaffoldPoints, view, pos, pos.north, pos.south, pos.west, pos.east)
   }
 
-  private def findIntersections(view: ExpandableGrid): Array[TwoD] =
+  private def findIntersections(view: ExpandableGrid[Int]): Array[Coords] =
     (for {
-      i <- 0 until view.height
+      i <- 0 until view.length
       j <- 0 until view.width
-      p = TwoD(i,j)
+      p = Coords(i,j)
       if isIntersection(p, view)
     } yield p).toArray
 

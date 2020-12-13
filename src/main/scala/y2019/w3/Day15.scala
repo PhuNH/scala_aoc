@@ -1,8 +1,8 @@
 package y2019.w3
 
-import common._
+import common.{Coords, Day, Direction, ExpandableGrid}
 import common.Utils._
-import y2019._
+import y2019.Intcode
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -17,12 +17,12 @@ class Day15 extends Day(inputPath(2019, 15)) {
 
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
 
-  private def runRobot(program: Intcode, grid: ExpandableGrid,
-                       option: Int, oxyPos: TwoD = TwoD.unknown): Int = {
+  private def runRobot(program: Intcode, grid: ExpandableGrid[Int],
+                       option: Int, oxyPos: Coords = Coords.unknown): Int = {
     var direction = Direction.North
-    val originPos = TwoD(ExpandableGrid.InitialIndex, ExpandableGrid.InitialIndex)
+    val originPos = Coords(ExpandableGrid.InitialIndex, ExpandableGrid.InitialIndex)
     val currentPos = originPos.copy()
-    val nextPos = TwoD.unknown
+    val nextPos = Coords.unknown
     var count = 0
     grid.setAtPos(currentPos, Moved)
     val stepStack = scala.collection.mutable.Stack(
@@ -35,21 +35,21 @@ class Day15 extends Day(inputPath(2019, 15)) {
         stepStack.indices foreach(i => stepStack(i)._1.increase(dV = ExpandableGrid.ExpandingSize))
         currentPos.increase(dV = ExpandableGrid.ExpandingSize)
         originPos.increase(dV = ExpandableGrid.ExpandingSize)
-        if (oxyPos != TwoD.unknown) oxyPos.increase(dV = ExpandableGrid.ExpandingSize)
-      case Direction.South if currentPos.v+1 >= grid.height =>
+        if (oxyPos != Coords.unknown) oxyPos.increase(dV = ExpandableGrid.ExpandingSize)
+      case Direction.South if currentPos.v+1 >= grid.length =>
         grid.expand(Direction.South)
       case Direction.West if currentPos.h-1 < 0 =>
         grid.expand(Direction.West)
         stepStack.indices foreach(i => stepStack(i)._1.increase(dH = ExpandableGrid.ExpandingSize))
         currentPos.increase(dH = ExpandableGrid.ExpandingSize)
         originPos.increase(dH = ExpandableGrid.ExpandingSize)
-        if (oxyPos != TwoD.unknown) oxyPos.increase(dH = ExpandableGrid.ExpandingSize)
+        if (oxyPos != Coords.unknown) oxyPos.increase(dH = ExpandableGrid.ExpandingSize)
       case Direction.East if currentPos.h+1 >= grid.width =>
         grid.expand(Direction.East)
       case _ => ()
     }
 
-    def checkPos(pos: TwoD): Boolean =
+    def checkPos(pos: Coords): Boolean =
       grid.getAtPos(pos) != Unchanged && grid.getAtPos(pos) != Moved && !stepStack.exists(_._1 == pos)
 
     def popStep(): Unit = {
@@ -61,9 +61,8 @@ class Day15 extends Day(inputPath(2019, 15)) {
 
     @scala.annotation.tailrec
     def loop(): Int = {
-      if (stepStack.isEmpty) {
-        count
-      } else {
+      if (stepStack.isEmpty) count
+      else {
         popStep()
         program.setInput(direction.id)
         val outputs = ArrayBuffer(0L)
@@ -106,16 +105,16 @@ class Day15 extends Day(inputPath(2019, 15)) {
 
   def one: Int = {
     val program = Intcode(codes)
-    val grid = ExpandableGrid()
+    val grid = ExpandableGrid[Int]()
     runRobot(program, grid, OxySearch)
   }
 
-  private def disperseOxy(grid: ExpandableGrid, oxyPos: TwoD): Int = {
-    def adjacentPositions(pos: TwoD): Seq[TwoD] =
+  private def disperseOxy(grid: ExpandableGrid[Int], oxyPos: Coords): Int = {
+    def adjacentPositions(pos: Coords): Seq[Coords] =
       Seq(pos.north, pos.south, pos.west, pos.east).filter(grid.getAtPos(_) == Moved)
 
     @scala.annotation.tailrec
-    def loop(input: Seq[(TwoD, Int)]): Int = {
+    def loop(input: Seq[(Coords, Int)]): Int = {
       val count = input.head._2
       input.foreach(x => grid.setAtPos(x._1, Oxidized))
       val output = input.flatMap(x => adjacentPositions(x._1).map((_, count + 1)))
@@ -128,8 +127,8 @@ class Day15 extends Day(inputPath(2019, 15)) {
 
   def two: Int = {
     val program = Intcode(codes)
-    val grid = ExpandableGrid()
-    val oxyPos = TwoD.unknown
+    val grid = ExpandableGrid[Int]()
+    val oxyPos = Coords.unknown
     runRobot(program, grid, MapDraw, oxyPos)
     disperseOxy(grid, oxyPos)
   }
