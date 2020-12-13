@@ -22,7 +22,7 @@ class Day12 extends Day(inputPath(2020, 12)) {
     def processInstruction(instruction: Instruction): Unit = instruction.action match {
       case a if "NSEW".contains(a) =>
         val whatToUpdate = if (version == 0) location else direction
-        whatToUpdate.updateWith(actionToDirection(a) * instruction.value + whatToUpdate)
+        whatToUpdate += actionToDirection(a) * instruction.value
       case a if "LR".contains(a) => instruction.value match {
         case 90 => direction.updateWith(direction.swap * Coords(-1, 1) * actionToAngle(a))
         case 180 => direction *= -1

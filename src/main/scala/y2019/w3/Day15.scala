@@ -32,18 +32,20 @@ class Day15 extends Day(inputPath(2019, 15)) {
     def adjust(): Unit = direction match {
       case Direction.North if currentPos.v-1 < 0 =>
         grid.expand(Direction.North)
-        stepStack.indices foreach(i => stepStack(i)._1.increase(dV = ExpandableGrid.ExpandingSize))
-        currentPos.increase(dV = ExpandableGrid.ExpandingSize)
-        originPos.increase(dV = ExpandableGrid.ExpandingSize)
-        if (oxyPos != Coords.unknown) oxyPos.increase(dV = ExpandableGrid.ExpandingSize)
+        val increment = Coords(ExpandableGrid.ExpandingSize, 0)
+        stepStack.indices foreach(i => stepStack(i)._1 += increment)
+        currentPos += increment
+        originPos += increment
+        if (oxyPos != Coords.unknown) oxyPos += increment
       case Direction.South if currentPos.v+1 >= grid.length =>
         grid.expand(Direction.South)
       case Direction.West if currentPos.h-1 < 0 =>
         grid.expand(Direction.West)
-        stepStack.indices foreach(i => stepStack(i)._1.increase(dH = ExpandableGrid.ExpandingSize))
-        currentPos.increase(dH = ExpandableGrid.ExpandingSize)
-        originPos.increase(dH = ExpandableGrid.ExpandingSize)
-        if (oxyPos != Coords.unknown) oxyPos.increase(dH = ExpandableGrid.ExpandingSize)
+        val increment = Coords(0, ExpandableGrid.ExpandingSize)
+        stepStack.indices foreach(i => stepStack(i)._1 += increment)
+        currentPos += increment
+        originPos += increment
+        if (oxyPos != Coords.unknown) oxyPos += increment
       case Direction.East if currentPos.h+1 >= grid.width =>
         grid.expand(Direction.East)
       case _ => ()

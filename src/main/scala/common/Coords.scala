@@ -7,8 +7,6 @@ case class Coords(var v: Int, var h: Int) {
   }
   def updateWith(that: Coords): Unit = update(that.v, that.h)
 
-  def increase(dV: Int = 0, dH: Int = 0): Unit = update(v + dV, h + dH)
-
   def +=(that: Coords): Unit = update(v + that.v, h + that.h)
   def *=(num: Int): Unit = update(v * num, h * num)
 
@@ -24,6 +22,8 @@ case class Coords(var v: Int, var h: Int) {
   def *(that: Coords): Coords = Coords(v * that.v, h * that.h)
 
   def selfMhtDist: Int = math.abs(v) + math.abs(h)
+
+  def mhtDistWith(that: Coords): Int = math.abs(v - that.v) + math.abs(h - that.h)
 }
 
 object Coords {

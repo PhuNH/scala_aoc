@@ -1,6 +1,6 @@
 package y2019.w2
 
-import common.Day
+import common.{Coords, Day}
 import common.Utils._
 
 import scala.io.Source
@@ -13,32 +13,32 @@ class Day3 extends Day(inputPath(2019, 3)) {
     }
   }
 
-  private def generateSteps(path: List[String]): List[((Int, Int), Int)] = {
-    def genSectSteps(start: ((Int, Int), Int), sect: String): List[((Int, Int), Int)] = sect match {
-      case SectString('U', n) => (1 to n).map(s => ((start._1._1, start._1._2 + s), start._2 + s)).toList
-      case SectString('D', n) => (1 to n).map(s => ((start._1._1, start._1._2 - s), start._2 + s)).toList
-      case SectString('L', n) => (1 to n).map(s => ((start._1._1 - s, start._1._2), start._2 + s)).toList
-      case SectString('R', n) => (1 to n).map(s => ((start._1._1 + s, start._1._2), start._2 + s)).toList
+  private def generateSteps(path: List[String]): List[(Coords, Int)] = {
+    def genSectSteps(start: (Coords, Int), sect: String): List[(Coords, Int)] = sect match {
+      case SectString('U', n) => (1 to n).map(s => (start._1 + Coords(-s, 0), start._2 + s)).toList
+      case SectString('D', n) => (1 to n).map(s => (start._1 + Coords(s, 0), start._2 + s)).toList
+      case SectString('L', n) => (1 to n).map(s => (start._1 + Coords(0, -s), start._2 + s)).toList
+      case SectString('R', n) => (1 to n).map(s => (start._1 + Coords(0, s), start._2 + s)).toList
     }
 
     @scala.annotation.tailrec
-    def recGen(start: ((Int, Int), Int),
+    def recGen(start: (Coords, Int),
                path: List[String],
-               steps: List[((Int, Int), Int)]): List[((Int, Int), Int)] = path match {
+               steps: List[(Coords, Int)]): List[(Coords, Int)] = path match {
       case h :: t =>
         val newSteps = genSectSteps(start, h)
         val newStart = newSteps.last
         recGen(newStart, t, steps ++ newSteps)
       case _ => steps
     }
-    recGen(((0, 0), 0), path, List())
+    recGen((Coords(0, 0), 0), path, List())
   }
 
-  private val paths: List[List[((Int, Int), Int)]] = using(Source.fromResource(inputs.head))(
+  private val paths: List[List[(Coords, Int)]] = using(Source.fromResource(inputs.head))(
     _.getLines().map(l => generateSteps(l.split(",").toList)).toList
   )
 
-  private def findCrossPoints(paths: List[List[((Int, Int), Int)]]): List[((Int, Int), Int)] = {
+  private def findCrossPoints(paths: List[List[(Coords, Int)]]): List[(Coords, Int)] = {
     val firstPath = paths.head
     val secondPath = paths(1)
     val firstPointCoords = firstPath.map(_._1)
@@ -58,11 +58,9 @@ class Day3 extends Day(inputPath(2019, 3)) {
     // why does this take forever?
   }
 
-  private val crossPoints: List[((Int, Int), Int)] = findCrossPoints(paths)
+  private val crossPoints: List[(Coords, Int)] = findCrossPoints(paths)
 
-  private def calMhtDist(point: (Int, Int)): Int = Math.abs(point._1) + Math.abs(point._2)
-
-  def one: Int = crossPoints.map(p => calMhtDist(p._1)).min
+  def one: Int = crossPoints.map(p => p._1.selfMhtDist).min
 
   def two: Int = crossPoints.map(_._2).min
 }
