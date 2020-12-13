@@ -1,6 +1,6 @@
 package y2020.w2
 
-import common.Day
+import common.{Day, Grid}
 import common.Utils._
 
 import scala.io.Source
@@ -70,15 +70,13 @@ class Day11 extends Day(inputPath(2020, 11), testPath(2020, 11, 1)) {
     x <- base(0).indices
   } yield checkRules(x, y, base, current, seatType)).forall(_ == false)
 
-  private def cloneLayout(from: Layout, to: Layout): Unit = for (i <- to.indices) to(i) = from(i).clone()
-
   private def getSeats(seatType: Int): Int = {
     val base = new Layout(length)
     val temp = new Layout(length)
-    cloneLayout(layout, base)
-    cloneLayout(base, temp)
+    Grid.cloneGrid(layout, base)
+    Grid.cloneGrid(base, temp)
 
-    while (!checkRulesAll(base, temp, seatType)) cloneLayout(temp, base)
+    while (!checkRulesAll(base, temp, seatType)) Grid.cloneGrid(temp, base)
     base.map(_.count(_ == OCCUP)).sum
   }
 
