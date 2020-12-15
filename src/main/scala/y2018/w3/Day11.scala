@@ -1,12 +1,11 @@
 package y2018.w3
 
 import common.{Day, Grid}
-import common.Utils._
 
-class Day11 extends Day(inputPath(2018, 11)) {
+class Day11 extends Day("7403") {
   type Grid = Array[Array[Int]]
 
-  private val gridSerialNumber = 7403
+  private val gridSerialNumber = inputs(0).toInt
   private val grid: Grid = Array.fill(300)(Array.fill(300)(0))
   for (y <- 1 to 300)
     for (x <- 1 to 300)
