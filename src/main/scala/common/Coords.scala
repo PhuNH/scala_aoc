@@ -1,6 +1,6 @@
 package common
 
-case class Coords(var v: Int, var h: Int) {
+case class Coords(var v: Int, var h: Int) extends Ordered[Coords] {
   def update(v: Int = this.v, h: Int = this.h): Unit = {
     this.v = v
     this.h = h
@@ -14,6 +14,7 @@ case class Coords(var v: Int, var h: Int) {
   def south: Coords = this.copy(v = this.v + 1)
   def west: Coords = this.copy(h = this.h - 1)
   def east: Coords = this.copy(h = this.h + 1)
+  def adjacent: Array[Coords] = Array(north, west, east, south)
 
   def swap: Coords = Coords(h, v)
 
@@ -24,6 +25,14 @@ case class Coords(var v: Int, var h: Int) {
   def selfMhtDist: Int = math.abs(v) + math.abs(h)
 
   def mhtDistWith(that: Coords): Int = math.abs(v - that.v) + math.abs(h - that.h)
+
+  override def clone: Coords = new Coords(v, h)
+
+  override def compare(that: Coords): Int = {
+    val vComp = Integer.compare(v, that.v)
+    if (vComp != 0) vComp
+    else Integer.compare(h, that.h)
+  }
 }
 
 object Coords {
