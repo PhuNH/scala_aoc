@@ -1,5 +1,7 @@
 package common
 
+import scala.language.reflectiveCalls
+
 object Utils {
   def inputPath(year: Int, day: Int) = s"input/$year/$day"
 
