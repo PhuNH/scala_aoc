@@ -1,6 +1,7 @@
 package common
 
 import scala.collection.mutable.ArrayBuffer
+import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
 class ExpandableGrid[T] extends Grid[T] {
