@@ -2,7 +2,7 @@ package y2019.w4
 
 import common.{Coords, Day, ExpandableGrid}
 import common.Utils._
-import y2019.Intcode
+import y2019.{AsciiInterface, Intcode}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -16,24 +16,6 @@ class Day17 extends Day(inputPath(2019, 17)) {
   private val scaffoldPoints = Set(Scaffold, Up, Down, Left, Right).map(_.toInt)
 
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
-
-  private def convertToGrid(outputs: ArrayBuffer[Long]): ExpandableGrid[Int] = {
-    @scala.annotation.tailrec
-    def splitData(data: ArrayBuffer[Int], acc: ArrayBuffer[ArrayBuffer[Int]]): ArrayBuffer[ArrayBuffer[Int]] = {
-      val splitIndex = data.indexOf('\n')
-      if (splitIndex == -1) {
-        if (data.nonEmpty) acc += data else acc
-      } else {
-        val splitted = data.splitAt(splitIndex)
-        splitData(splitted._2.tail, if (splitted._1.nonEmpty) acc += splitted._1 else acc)
-      }
-    }
-
-    val data = splitData(outputs.map(_.toInt), ArrayBuffer.empty[ArrayBuffer[Int]])
-    val grid = ExpandableGrid[Int]()
-    grid.setData(data)
-    grid
-  }
 
   private def alignParam(pos: Coords): Int = pos.v * pos.h
 
@@ -57,7 +39,7 @@ class Day17 extends Day(inputPath(2019, 17)) {
     val program = Intcode(codes)
     val outputs = ArrayBuffer(0L)
     program.run(outputs)
-    val view = convertToGrid(outputs.tail)
+    val view = AsciiInterface.ascii2Grid(outputs.tail)
     findIntersections(view).map(alignParam).sum
   }
 
