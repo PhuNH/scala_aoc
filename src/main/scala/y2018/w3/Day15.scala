@@ -22,7 +22,7 @@ class Day15 extends Day(inputPath(2018, 15), testPath(2018, 15, 1),
     def findAdjacentEnemy(goblins: IndexedSeq[Creature], elves: IndexedSeq[Creature]): Option[Creature] = {
       val enemies = (if (isGoblin) elves else goblins).sortWith((c1, c2) =>
         if (c1.hp == c2.hp) c1.coords < c2.coords else c1.hp < c2.hp)
-      enemies.find(e => coords.adjacent.contains(e.coords))
+      enemies.find(e => coords.adjacents.contains(e.coords))
     }
 
     @tailrec
@@ -47,7 +47,7 @@ class Day15 extends Day(inputPath(2018, 15), testPath(2018, 15, 1),
           } else if (curMinDist == popped._1+1) curMinTargets = curMinTargets :+ (popped._2, popped._3)
         }
         distanceGrid.setAtPos(popped._3, (popped._1 + 1, popped._2))
-        val nextStepQueue = stepQueue.tail ++ popped._3.adjacent.filter(c =>
+        val nextStepQueue = stepQueue.tail ++ popped._3.adjacents.filter(c =>
           distanceGrid.getAtPos(c)._1 == -2 && isGood(c)).map(c => {
           distanceGrid.setAtPos(c, (-1, Coords.unknown))
           (popped._1+1, popped._2, c)
@@ -61,13 +61,13 @@ class Day15 extends Day(inputPath(2018, 15), testPath(2018, 15, 1),
       def isGood(coords: Coords): Boolean = map.getAtPos(coords) == '.'
 
       val enemies = if (isGoblin) elves else goblins
-      val targets = enemies.flatMap(_.coords.adjacent).toSet.filter(isGood)
+      val targets = enemies.flatMap(_.coords.adjacents).toSet.filter(isGood)
       if (targets.isEmpty) None
       else {
         val distanceData = Array.fill(map.length)(Array.fill(map.width)((-2, Coords.unknown)))
         val distanceGrid = FixedGrid.makeFrom(distanceData)
         distanceGrid.setAtPos(coords, (0, coords))
-        val stepQueue = coords.adjacent.filter(c => isGood(c)).map(c => (0, c, c))
+        val stepQueue = coords.adjacents.filter(c => isGood(c)).map(c => (0, c, c))
         getNextStepRecursive(targets, distanceGrid, isGood, stepQueue, Array.empty[(Coords, Coords)], 0)
       }
     }

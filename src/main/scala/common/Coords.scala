@@ -14,7 +14,7 @@ case class Coords(var v: Int, var h: Int) extends Ordered[Coords] {
   def south: Coords = this.copy(v = this.v + 1)
   def west: Coords = this.copy(h = this.h - 1)
   def east: Coords = this.copy(h = this.h + 1)
-  def adjacent: Array[Coords] = Array(north, west, east, south)
+  def adjacents: Array[Coords] = Array(north, west, east, south)
 
   def swap: Coords = Coords(h, v)
 
@@ -26,7 +26,7 @@ case class Coords(var v: Int, var h: Int) extends Ordered[Coords] {
   def ne: Coords = this + Coords(-1, 1)
   def sw: Coords = this + Coords(1, -1)
   def se: Coords = this + Coords(1, 1)
-  def diagonal: Array[Coords] = Array(nw, ne, sw, se)
+  def diagonals: Array[Coords] = Array(nw, ne, sw, se)
 
   def selfMhtDist: Int = math.abs(v) + math.abs(h)
 

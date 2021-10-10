@@ -46,7 +46,7 @@ class Day18 extends Day(inputPath(2019, 18)) {
       val currentUnit = searchQueue.dequeue()
       if (targets.contains(currentUnit.coords))
         paths = paths.appended(currentUnit)
-      searchQueue.enqueueAll(currentUnit.coords.adjacent
+      searchQueue.enqueueAll(currentUnit.coords.adjacents
         .filter(coords => !searched.contains(coords) &&
           (entrances.contains(coords) || passages.contains(coords) || keys.contains(coords) || doors.contains(coords)))
         .map(coords => {
@@ -136,8 +136,8 @@ class Day18 extends Day(inputPath(2019, 18)) {
   def two: Int = {
     val oldEntrance = entrances.head
     entrances.remove(oldEntrance)
-    entrances.addAll(oldEntrance.diagonal)
-    oldEntrance.adjacent.foreach(p => passages.remove(p))
+    entrances.addAll(oldEntrance.diagonals)
+    oldEntrance.adjacents.foreach(p => passages.remove(p))
 
     val paths = keys.keys.map(k => (k, searchPaths(k, keys.keys.toSet.excl(k)))).toMap ++
       entrances.map(coords => (coords, searchPaths(coords, keys.keys.toSet)))
