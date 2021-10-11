@@ -31,10 +31,10 @@ class Day18 extends Day(inputPath(2019, 18)) {
   })
   private val keyNames = keys.values.toSet
 
-  case class PathSearchUnit(coords: Coords, doors: Set[Char], length: Int)
+  private case class PathSearchUnit(coords: Coords, doors: Set[Char], length: Int)
 
   // TODO compare time between stack and queue
-  def searchPaths(src: Coords, targets: Set[Coords]): Array[PathSearchUnit] = {
+  private def searchPaths(src: Coords, targets: Set[Coords]): Array[PathSearchUnit] = {
     var paths = Array.empty[PathSearchUnit]
 
     val searchQueue = mutable.Queue.empty[PathSearchUnit]
@@ -58,7 +58,7 @@ class Day18 extends Day(inputPath(2019, 18)) {
     paths
   }
 
-  def findShortestLen(src: Coords, paths: Map[Coords, Array[PathSearchUnit]]): Int = {
+  private def findShortestLen(src: Coords, paths: Map[Coords, Array[PathSearchUnit]]): Int = {
     val states = mutable.Map.empty[(Coords, Set[Char]), Int]
 
     def traverse(src: Coords, collected: Set[Char], accLen: Int): Int = {
@@ -87,7 +87,7 @@ class Day18 extends Day(inputPath(2019, 18)) {
     findShortestLen(entrances.head, paths)
   }
 
-  def findShortestCombinedLen(srcs: Set[Coords], paths: Map[Coords, Array[PathSearchUnit]]): Int = {
+  private def findShortestCombinedLen(srcs: Set[Coords], paths: Map[Coords, Array[PathSearchUnit]]): Int = {
     val overallStates = mutable.Map.empty[(Map[Coords, Coords], Set[Char]), Int]
 
     def traverse(srcs: Map[Coords, Coords], collected: Set[Char], accLen: Int): Int = {

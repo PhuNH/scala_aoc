@@ -6,7 +6,7 @@ import common.Utils._
 //import scala.annotation.tailrec
 import scala.io.Source
 
-case class Deck(length: BigInt) {
+private case class Deck(length: BigInt) {
   def dealNew(index: BigInt): BigInt = length - index - 1
 
   def cut(n: BigInt, initialIndex: BigInt): BigInt = (initialIndex + length - n) % length
@@ -29,7 +29,7 @@ case class Deck(length: BigInt) {
 class Day22 extends Day(inputPath(2019, 22)) {
   private val process: Array[String] = using(Source.fromResource(inputs(0)))(_.getLines().toArray)
 
-  def shuffle(deck: Deck, initialIndex: BigInt): BigInt = {
+  private def shuffle(deck: Deck, initialIndex: BigInt): BigInt = {
     process.foldLeft(initialIndex)((index, step) => {
       val words = step.split(' ')
       words(0) match {
@@ -48,7 +48,7 @@ class Day22 extends Day(inputPath(2019, 22)) {
     println(shuffle(Deck(10007), 2019))
   }
 
-  def shuffleBackwards(deck: Deck, finalIndex: BigInt): BigInt = {
+  private def shuffleBackwards(deck: Deck, finalIndex: BigInt): BigInt = {
     process.foldRight(finalIndex)((step, index) => {
       val words = step.split(' ')
       words(0) match {

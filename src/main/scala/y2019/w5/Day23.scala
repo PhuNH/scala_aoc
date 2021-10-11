@@ -21,7 +21,7 @@ class Day23 extends Day(inputPath(2019, 23)) {
   private var natValue = (0L, 0L)
   private var prevSentToZero: Option[(Long, Long)] = None
   private var isNetworkIdle = false
-  def loopThroughComputers(): Unit = {
+  private def loopThroughComputers(): Unit = {
     computers.zipWithIndex.foreach { case ((program, outputs, queue, IdleStatus(_)), index) =>
       program.run(outputs)
       computers(index)._4.isIdle = outputs(0) <= 0
@@ -51,7 +51,7 @@ class Day23 extends Day(inputPath(2019, 23)) {
     }
   }
 
-  def run(): Unit = {
+  private def run(): Unit = {
     while (true) {
       loopThroughComputers()
       isNetworkIdle = computers.forall(_._4.isIdle)

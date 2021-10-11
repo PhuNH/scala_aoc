@@ -49,9 +49,9 @@ class Day20 extends Day(inputPath(2019, 20)) {
   private val outerPortalSet = portalPartitions._1.toSet
   private val innerPortalSet = portalPartitions._2.toSet
 
-  case class PathSearchUnit(coords: Coords, length: Int)
+  private case class PathSearchUnit(coords: Coords, length: Int)
 
-  def bfs(src: Coords, target: Coords): Int = {
+  private def bfs(src: Coords, target: Coords): Int = {
     val searchQueue = mutable.Queue.empty[PathSearchUnit]
     searchQueue.enqueue(PathSearchUnit(src, 0))
     val searched = mutable.Set.empty[Coords]
@@ -78,10 +78,10 @@ class Day20 extends Day(inputPath(2019, 20)) {
     bfs(start, end)
   }
 
-  case class CoordsWithLayer(coords: Coords, layer: Int)
-  case class PathSearchUnitWithLayer(coords: Coords, layer: Int, length: Int)
+  private case class CoordsWithLayer(coords: Coords, layer: Int)
+  private case class PathSearchUnitWithLayer(coords: Coords, layer: Int, length: Int)
 
-  def bfsWithLayer(src: Coords, target: Coords): Int = {
+  private def bfsWithLayer(src: Coords, target: Coords): Int = {
     val searchQueue = mutable.Queue.empty[PathSearchUnitWithLayer]
     searchQueue.enqueue(PathSearchUnitWithLayer(src, 0, 0))
     val searched = mutable.Set.empty[CoordsWithLayer]

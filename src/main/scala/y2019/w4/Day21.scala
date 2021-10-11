@@ -9,7 +9,7 @@ import scala.collection.mutable.ArrayBuffer
 class Day21 extends Day(inputPath(2019, 21)) {
   private val codes: Array[Long] = Intcode.readCodes(inputs.head)
 
-  def runSpringscript(asciiCodeString: String): Unit = {
+  private def runSpringscript(asciiCodeString: String): Unit = {
     val compiler = Intcode(codes)
     val asciiCode = AsciiInterface.string2Ascii(asciiCodeString)
     val springscript = Springscript(compiler, asciiCode)
@@ -44,7 +44,7 @@ class Day21 extends Day(inputPath(2019, 21)) {
   }
 }
 
-case class Springscript(compiler: Intcode, asciiCode: IndexedSeq[Int]) {
+private case class Springscript(compiler: Intcode, asciiCode: IndexedSeq[Int]) {
   def run(): Unit = {
     val outputs = ArrayBuffer(0L)
     compiler.run(outputs)
