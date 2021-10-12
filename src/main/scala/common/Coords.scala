@@ -44,5 +44,10 @@ case class Coords(var v: Int, var h: Int) extends Ordered[Coords] {
 object Coords {
   val Unknown: Int = -1
 
+  val North: Coords = Coords(-1, 0)
+  val South: Coords = Coords(1, 0)
+  val East: Coords = Coords(0, 1)
+  val West: Coords = Coords(0, -1)
+
   def unknown: Coords = Coords(Unknown, Unknown)
 }

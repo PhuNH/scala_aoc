@@ -24,4 +24,18 @@ object AsciiInterface {
   }
 
   def string2Ascii(string: String): IndexedSeq[Int] = string.map(c => c.toInt)
+
+  def outputs2String(outputs: ArrayBuffer[Long]): String = outputs.map(_.toChar).mkString("")
+
+  def inputSequence(program: Intcode, outputs: ArrayBuffer[Long] = ArrayBuffer(0L), seq: IndexedSeq[Int]): Unit = {
+    for (i <- seq) {
+      program.setInput(i)
+      program.run(outputs)
+    }
+  }
+
+  def inputString(program: Intcode, outputs: ArrayBuffer[Long] = ArrayBuffer(0L), string: String): Unit = {
+    print(string)
+    inputSequence(program, outputs, string2Ascii(string))
+  }
 }

@@ -1,0 +1,48 @@
+             ----------------------------------
+             | Sec. Chkpt.  | Science Lab     |
+             |              | antenna         |
+             ----------------------------------
+             | PSF          | Crew Quarters   |
+             |              | weather machine |
+             ----------------------------------
+                            | Holodeck        |
+                            | hologram        |
+-----------------------------------------------     -----------------
+| GWC        | Engineering  | Arcade          |     | Observatory   |
+| escape pod |              | molten lava     |     | fuel cell     |
+-----------------------------------------------     -----------------
+                            | Corridor        |     | Sick Bay      |
+                            | manifold        |     | infinite loop |
+                            ----------------------------------------------------------
+                            | WDM             | Hallway                              |
+                            | easter egg      | astrolabe                            |
+                            ----------------------------------------------------------
+                            | Hull Breach     |---------- | Navigation               |
+                            |                 | Kitchen | | space law space brochure |
+             -------------------------------------------- ----------------------------
+             | Passages     | Storage         |           | HCF     |
+             | photons      |                 |           -----------
+             ----------------------------------
+             | Stables      |
+             | giant elmg.  |
+             ----------------
+                            
+inventory: easter egg, manifold, hologram, weather machine, antenna, space law space brochure, astrolabe, fuel cell
+
+
+^
+|           (as + ee + fc + slsb + wm)      (an + as + fc + slsb + wm)      (an + as + ee + slsb + wm)
+|           (as + fc + slsb + wm)           (as + ee + slsb + wm)
+|
+|           hologram    manifold
+|
+|   droids  (an + as + slsb + wm)
+|
+|           antenna     weather machine     fuel cell       space law space brochure        astrolabe       easter egg
+|           an          wm                  fc              slsb                            as              ee
+|
+|           (an + ee + fc + slsb + wm)
+|           (an + as + ee + fc + wm)
+|           (an + as + ee + fc + slsb)
+
+(an + as + ee + fc + slsb + wm)

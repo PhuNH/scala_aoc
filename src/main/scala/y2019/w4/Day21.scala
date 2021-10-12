@@ -48,12 +48,9 @@ private case class Springscript(compiler: Intcode, asciiCode: IndexedSeq[Int]) {
   def run(): Unit = {
     val outputs = ArrayBuffer(0L)
     compiler.run(outputs)
-    for (i <- asciiCode) {
-      compiler.setInput(i)
-      compiler.run(outputs)
-    }
+    AsciiInterface.inputSequence(compiler, outputs, asciiCode)
 
-    print(outputs.tail.init.map(_.toChar).mkString(""))
+    print(AsciiInterface.outputs2String(outputs.tail.init))
     if (outputs.tail.last > 255) println(outputs.tail.last)
     else print(outputs.tail.last.toChar)
   }
