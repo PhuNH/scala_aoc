@@ -23,6 +23,8 @@ case class Coords(var v: Int, var h: Int) extends Ordered[Coords] {
   def *(that: Coords): Coords = Coords(v * that.v, h * that.h)
   def -(that: Coords): Coords = this + that * (-1)
 
+  def unary_- : Coords = this * (-1)
+
   def nw: Coords = this + Coords(-1, -1)
   def ne: Coords = this + Coords(-1, 1)
   def sw: Coords = this + Coords(1, -1)
