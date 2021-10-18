@@ -3,7 +3,7 @@ package y2018.w4
 import common.Day
 import common.Utils._
 
-import scala.annotation.tailrec
+import scala.collection.mutable
 import scala.io.Source
 
 class Day23 extends Day(inputPath(2018, 23)) {
@@ -26,29 +26,7 @@ class Day23 extends Day(inputPath(2018, 23)) {
   }
 
   private case class Nanobot(pos: Vector, r: Int) {
-    val (min_x, max_x): (Int, Int) = (pos.x - r, pos.x + r)
-    val (min_y, max_y): (Int, Int) = (pos.y - r, pos.y + r)
-    val (min_z, max_z): (Int, Int) = (pos.z - r, pos.z + r)
-
     def isInRange(otherPos: Vector): Boolean = otherPos.manhattan(pos) <= r
-  }
-
-  private object Nanobot {
-    def overlappedRange(indices: IndexedSeq[Int]): Set[Vector] = {
-      val min_x = indices.map(nanobots(_).min_x).max
-      val max_x = indices.map(nanobots(_).max_x).min
-      val min_y = indices.map(nanobots(_).min_y).max
-      val max_y = indices.map(nanobots(_).max_y).min
-      val min_z = indices.map(nanobots(_).min_z).max
-      val max_z = indices.map(nanobots(_).max_z).min
-      (for {
-        x <- min_x to max_x
-        y <- min_y to max_y
-        z <- min_z to max_z
-        p = Vector(x, y, z)
-        if indices.forall(nanobots(_).isInRange(p))
-      } yield p).toSet
-    }
   }
 
   private val nanobots: Array[Nanobot] = using(Source.fromResource(inputs(0)))(_.getLines().toArray.map(l => {
@@ -65,16 +43,23 @@ class Day23 extends Day(inputPath(2018, 23)) {
     inRangeOf(strongest).length
   }
 
-  @tailrec
-  private def largestCombination(size: Int): Set[Vector] = {
-    println(size)
-    nanobots.indices.combinations(size).find(c => Nanobot.overlappedRange(c).nonEmpty) match {
-      case None => largestCombination(size - 1)
-      case Some(c) => Nanobot.overlappedRange(c)
-    }
-  }
-
   def two: Int = {
-    largestCombination(nanobots.length).minBy(_.manhattan).manhattan
+    // https://www.reddit.com/r/adventofcode/comments/a8s17l/2018_day_23_solutions/ecfkmyo/?context=8&depth=9
+    val q = mutable.PriorityQueue.empty[(Int, Int)](Ordering.by[(Int, Int), Int](_._1).reverse)
+    nanobots.foreach(b => {
+      val d = b.pos.manhattan
+      q.enqueue((0.max(d - b.r), 1))
+      q.enqueue((d + b.r, -1))
+    })
+    var (count, maxCount, result) = (0, 0, 0)
+    while (q.nonEmpty) {
+      val (dist, side) = q.dequeue()
+      count += side
+      if (count > maxCount) {
+        maxCount = count
+        result = dist
+      }
+    }
+    result
   }
 }
