@@ -48,7 +48,7 @@ class Day23 extends Day(inputPath(2018, 23)) {
     val q = mutable.PriorityQueue.empty[(Int, Int)](Ordering.by[(Int, Int), Int](_._1).reverse)
     nanobots.foreach(b => {
       val d = b.pos.manhattan
-      q.enqueue((0.max(d - b.r), 1))
+      q.enqueue((0.max(d - b.r + 1), 1))
       q.enqueue((d + b.r, -1))
     })
     var (count, maxCount, result) = (0, 0, 0)
